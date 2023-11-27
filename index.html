@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curso Interactivo</title>
+  <style>
+    body {
+      font-family: Consolas;
+      margin: 20px;
+      background-image: url('fondo.jpg');
+      background-size: cover;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    h1, h2, p {
+      text-align: left;
+    }
+
+    button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      cursor: pointer;
+      background-color: #3498db;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+    }
+
+    .contenedor-fondo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.7);
+      z-index: 0;
+      display: flex;
+    }
+
+    .contenedor {
+      position: relative;
+      z-index: 1;
+    }
+
+    .campo {
+      margin-bottom: 10px;
+      width: 100%;
+    }
+
+    #evaluacion input, #evaluacion select {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="contenedor-fondo"></div>
+
+  <div class="contenedor">
+  <h1>Bienvenido a PEI</h1>
+  <p>Este es un curso interactivo utilizando JavaScript creado por Amanda García.</p>
+
+  <button onclick="mostrarInformacion()">Mostrar Información</button>
+  <button onclick="registrar()">Registrarse</button>
+  <button onclick="mostrarContenidoCurso()" id="accederBtn" style="display: none;">Acceder al Curso</button>
+
+    <div class="contenedor" id="registro" style="display: none;">
+    <h2>Datos de Registro</h2>
+    
+    <div class="campo">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" required>
+    </div>
+
+    <div class="campo">
+      <label for="usuario">Usuario:</label>
+      <input type="text" id="usuario" required>
+    </div>
+
+    <div class="campo">
+      <label for="contrasena">Contraseña:</label>
+      <input type="password" id="contrasena" required>
+    </div>
+
+    <button onclick="verificarRegistro()">Registrarse</button>
+  </div>
+
+ <div id="curso" style="display: none;">
+  <h2>Contenido del Curso</h2>
+  <p>Bienvenido al curso. Aquí encontrarás recursos educativos:</p>
+
+  <ul>
+    <li><a href="https://youtu.be/Q9fwkpxr3Dw/tema1">Tema 1: Introducción a JavaScript</a></li>
+    <li><a href="https://youtu.be/3yM5uXp-T_0/tema2">Tema 2: Introducción a Css</a></li>
+    <li><a href="https://youtu.be/mNbnV3aN3KA/tema3">Tema 3: Introducción a HTML</a></li>
+  </ul>
+
+  <img width="560" height="315" src="imagen.jpg" alt="Imagen representativa del curso">
+  <img width="560" height="315" src="java.jpg" alt="Imagen representativa del curso">
+
+  <h2>¿¡No sabes la importancia de la programación!?</h2>
+  <p>¡Mira este video informativo!</p>
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/28JKwGTiyMI" title="La importancia de la programación" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+  <button onclick="realizarEvaluacion()">Realizar Evaluación</button>
+</div>
+
+
+  <div id="evaluacion" style="display: none;">
+    <h2>Evaluación</h2>
+
+    <!-- Preguntas -->
+
+    <div class="campo">
+    <label for="pregunta1">¿Qué es JavaScript?</label>
+    <select id="pregunta1">
+      <option value="0">Lenguaje de programación</option>
+      <option value="1">Marca de café</option>
+      <option value="2">Tipo de flor</option>
+    </select>
+    </div>
+
+    <div class="campo">
+    <label for="pregunta2">¿Cuál es el elemento principal de HTML?</label>
+    <select id="pregunta2">
+      <option value="0">&lt;header&gt;</option>
+      <option value="1">&lt;body&gt;</option>
+      <option value="2">&lt;html&gt;</option>
+    </select>
+    </div>
+
+    <div class="campo">
+    <label for="pregunta3">¿Cómo se declara una variable en JavaScript?</label>
+    <select id="pregunta3">
+      <option value="0">variable x</option>
+      <option value="1">x = variable</option>
+      <option value="2">var x</option>
+    </select>
+    </div>
+
+    <div class="campo">
+    <label for="pregunta4">¿Qué propiedad se utiliza para cambiar el color de fondo de un elemento?</label>
+    <select id="pregunta4">
+      <option value="0">color</option>
+      <option value="1">background-color</option>
+      <option value="2">border-color</option>
+    </select>
+    </div>
+
+    <div class="campo">
+    <label for="pregunta5">¿Cuál de las siguientes opciones es un tipo de dato en JavaScript?</label>
+    <select id="pregunta5">
+      <option value="0">boolean</option>
+      <option value="1">margin</option>
+      <option value="2">border</option>
+    </select>
+    </div>
+
+    <button onclick="calificar()">Calificar</button>
+  </div>
+
+  <div id="resultado" style="display: none;">
+    <h2>Resultado</h2>
+    <p id="calificacion"></p>
+  </div>
+  </div>
+</div>
+
+  <script>
+    const institucion = {
+      nombre: "Institución Educativa PEI (Programar Es Importante)",
+      cursos: ["Curso de JavaScript", "Curso de HTML", "Curso de CSS"]
+    };
+
+    const preguntas = [
+      { pregunta: "¿Qué es JavaScript?", opciones: ["Lenguaje de programación", "Marca de café", "Tipo de flor"], respuestaCorrecta: 0 },
+      { pregunta: "¿Cuál es el elemento principal de HTML?", opciones: ["<header>", "<body>", "<html>"], respuestaCorrecta: 1 },
+      { pregunta: "¿Cómo se declara una variable en JavaScript?", opciones: ["variable x", "x = variable", "var x"], respuestaCorrecta: 2 },
+      { pregunta: "¿Qué propiedad se utiliza para cambiar el color de fondo de un elemento?", opciones: ["color", "background-color", "border-color"], respuestaCorrecta: 1 },
+      { pregunta: "¿Cuál de las siguientes opciones es un tipo de dato en JavaScript?", opciones: ["boolean", "margin", "border"], respuestaCorrecta: 0 },
+
+    ];
+
+    let usuarioRegistrado = null;
+
+    function mostrarInformacion() {
+      alert(`Bienvenido a ${institucion.nombre}.\n\nOfrecemos los siguientes cursos:\n\n${institucion.cursos.join("\n")}`);
+    }
+
+    function registrar() {
+      document.getElementById('registro').style.display = 'block';
+    }
+
+    function verificarRegistro() {
+      const nombre = document.getElementById('nombre').value;
+      const usuario = document.getElementById('usuario').value;
+      const contrasena = document.getElementById('contrasena').value;
+
+      if (usuario === "alumno" && contrasena === "2023") {
+        usuarioRegistrado = { nombre, usuario };
+        alert(`Datos del registro:\n\nNombre: ${usuarioRegistrado.nombre}\nUsuario: ${usuarioRegistrado.usuario}`);
+        document.getElementById('registro').style.display = 'none';
+        document.getElementById('accederBtn').style.display = 'block';
+      } else {
+        alert("Usuario o contraseña incorrectos. Inténtelo de nuevo.");
+      }
+    }
+
+    function mostrarContenidoCurso() {
+      alert("Bienvenido al curso.\n\nAquí encontrarás los recursos necesarios para aprender.");
+      document.getElementById('curso').style.display = 'block';
+    }
+
+    function realizarEvaluacion() {
+      document.getElementById('curso').style.display = 'none';
+      document.getElementById('evaluacion').style.display = 'block';
+    }
+
+    function calificar() {
+      let calificacion = 0;
+
+      for (let i = 1; i <= preguntas.length; i++) {
+        const respuesta = document.getElementById(`pregunta${i}`).value;
+        if (parseInt(respuesta) === preguntas[i - 1].respuestaCorrecta) {
+          calificacion += 20;
+        }
+      }
+
+      document.getElementById('evaluacion').style.display = 'none';
+      document.getElementById('resultado').style.display = 'block';
+      document.getElementById('calificacion').innerText = `Evaluación completada. Tu calificación es: ${calificacion}%`;
+    }
+  </script>
+</body>
+</html>
